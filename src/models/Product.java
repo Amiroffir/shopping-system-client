@@ -11,6 +11,28 @@ public class Product {
 
     private int quantity;
 
+    // Constructors
+
+    public Product(String name, String description, double price, int quantity) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.quantity=quantity;
+    }
+
+    public Product(int productId, String name, String description, double price, int quantity) {
+        this.productId = productId;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.quantity=quantity;
+    }
+
+    public Product() {
+    }
+
+    // Getters and Setters
+
     public int getProductId() {
         return productId;
     }

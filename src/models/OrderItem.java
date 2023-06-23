@@ -15,6 +15,8 @@ public class OrderItem {
 
     private double itemAmount;
 
+    // Getters and Setters
+
     public int getOrderItemId() {
         return orderItemId;
     }
@@ -57,8 +59,7 @@ public class OrderItem {
 
     @Override
     public String toString() {
-        return  orderItemId + "." +
-                " name:" + product.getName() +
+        return "name:" + product.getName() +
                 ", quantity:" + quantity +
                 ", itemAmount:" + itemAmount;
     }
