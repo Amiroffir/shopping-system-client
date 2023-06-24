@@ -2,7 +2,6 @@ package userMenus;
 
 import models.Order;
 import models.OrderItem;
-import models.Product;
 import services.ServicesManager;
 
 import java.util.List;

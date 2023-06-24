@@ -1,36 +1,30 @@
 package services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import models.Order;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 public class OrderService {
+    private final HttpClient httpClient = HttpClient.newHttpClient();
 
     public Order completeOrder() {
         Order order;
-        HttpURLConnection connection = null;
         try {
-            connection = ServicesManager.getInstance().createConnection("/orders/checkout", "POST", true);
-            connection.setRequestProperty("Cookie", ServicesManager.getInstance().getSessionToken());
+            HttpRequest request =
+                    ServicesManager.getInstance().getHttpService().createRequest("/orders/checkout", "POST", true);
 
-            connection.connect();
-            int responseCode = connection.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                ObjectMapper mapper = new ObjectMapper();
-                order = mapper.readValue(reader, Order.class);
-                ServicesManager.getInstance().getCart().clear(); // Clear the cart
-            } else {
-                throw new RuntimeException(connection.getResponseMessage());
-            }
-        } catch (IOException e) {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            order = ServicesManager.getInstance().getHttpService()
+                    .parseResponse(response, Order.class, HttpURLConnection.HTTP_OK);
+
+            ServicesManager.getInstance().getCart().clear(); // Clear the cart
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
-        } finally {
-            connection.disconnect();
         }
         return order;
     }

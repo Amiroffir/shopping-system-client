@@ -3,8 +3,6 @@ package services;
 import models.OrderItem;
 import models.Product;
 
-import java.io.IOException;
-import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,11 +14,11 @@ public class ServicesManager {
     private OrderItemService orderItemService;
     private UserService userService;
     private OrderService orderService;
+    private HttpService httpService;
     private List<OrderItem> cart;
     private List<Product> productsList;
 
     private String sessionToken = null;
-
 
     // Private constructor to prevent instantiation
     private ServicesManager() {
@@ -30,6 +28,7 @@ public class ServicesManager {
         orderItemService = new OrderItemService();
         userService = new UserService();
         orderService = new OrderService();
+        httpService = new HttpService();
         cart = new ArrayList<>();
         productsList = new ArrayList<>();
     }
@@ -81,18 +80,8 @@ public class ServicesManager {
         return orderService;
     }
 
-    public HttpURLConnection createConnection(String url, String method, boolean isOutput) {
-        try {
-            URI uri = new URI(BASE_URL + url);
-            HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
-            connection.setRequestMethod(method);
-            if (isOutput) {
-                connection.setDoOutput(true);
-                connection.setRequestProperty("Content-Type", "application/json");
-            }
-            return connection;
-        } catch (IOException | URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+    public HttpService getHttpService() {
+        return httpService;
     }
+
 }
